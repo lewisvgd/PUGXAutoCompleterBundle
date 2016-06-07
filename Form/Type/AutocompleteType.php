@@ -7,6 +7,8 @@ use PUGX\AutocompleterBundle\Form\Transformer\ObjectToIdTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\InvalidConfigurationException;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -46,6 +48,8 @@ class AutocompleteType extends AbstractType
             }
 
             $class = $entities[$options['entity_alias']]['class'];
+
+            $builder->setAttribute('entity_alias', $options['entity_alias']);
         }
 
         if ($options['class']) {
@@ -103,5 +107,10 @@ class AutocompleteType extends AbstractType
     public function getName()
     {
         return 'autocomplete';
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['entity_alias'] = $form->getConfig()->getAttribute('entity_alias');
     }
 }

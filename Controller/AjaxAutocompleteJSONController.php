@@ -33,7 +33,8 @@ class AjaxAutocompleteJSONController extends Controller
 
         if (isset($entityInfo['custom_search']) && $entityInfo['custom_search']) {
 
-            return $this->forward($entityInfo['custom_search'], array('entityInfo' => $entityInfo));
+            return $this->forward($entityInfo['custom_search'], array('entityInfo' => $entityInfo,
+                                                                      'letters'    => $letters));
         }
 
         switch ($entityInfo['search']){

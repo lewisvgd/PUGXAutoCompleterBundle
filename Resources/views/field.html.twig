@@ -1,0 +1,13 @@
+{% block autocomplete_widget %}
+    <script>
+        jQuery(function() {
+            jQuery("#{{ form.vars.id }}").autocompleter({
+                url_list: '{{ path('pugx_autocomplete_search', {entityAlias: 'categories'}) }}',
+                entity_alias: '{{ entity_alias }}'
+            });
+        });
+    </script>
+
+    {{ form_widget(form) }}
+
+{% endblock %}
