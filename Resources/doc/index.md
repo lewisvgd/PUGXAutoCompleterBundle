@@ -70,12 +70,80 @@ class AuthorFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            // for Symfony 2, use 'autocomplete' as second argument
-            ->add('book', 'PUGX\AutocompleterBundle\Form\Type\AutocompleteType', array('class' => 'AppBundle:Book'))
+            ->add('book', 'autocomplete', array('class' => 'AppBundle:Book'))
         ;
     }
 }
 ```
+
+
+### 3.1 Automatic Configuration
+
+If you would like the bundle to automatically render, add the form theming to twig
+
+```
+twig:
+    ...
+    form:
+        resources:
+            - ShtumiUsefulBundle::fields.html.twig
+```
+
+Import routes
+
+```
+pugx_autocomplete:
+    resource: '@PUGXAutocompleterBundle/Resources/config/routing.xml'
+```
+
+You should configure each autocomplete filter:
+
+// app/config/config.yml
+
+::
+
+    shtumi_useful:
+        autocomplete_entities:
+            users:
+                class: AcmeDemoBundle:User
+                role: ROLE_ADMIN
+                property: email
+
+            products:
+                class: AcmeDemoBundle:Product
+                role: ROLE_ADMIN
+                search: contains
+
+- **class** - Doctrine model.
+- **role** - User role to use form type. Default: *IS_AUTHENTICATED_ANONYMOUSLY*. It needs for security reason.
+- **property** - Property that will be prompted by autocomplete. Default: *title*.
+- **search** - LIKE format to get autocomplete values. You can use:
+   - *begins_with* - LIKE 'value%' (**default**)
+   - *ends_with* - LIKE '%value'
+   - *contains*  - LIKE '%value%'
+- **case_insensitive** - Whether or not matching should be case sensitive or not
+
+Usage
+
+``` php
+<?php
+// AppBundle/Form/Type/AuthorFormType.php
+
+// ...
+
+class AuthorFormType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('book', 'autocomplete', array('entity_alias' => 'products'))
+        ;
+    }
+}
+
+### 3.2 Manual Configuration
+
+
 
 As you can see, you must pass `class` as option to field. The class is the name of
 your entity, and it's used to retrieve your objects from the database.
