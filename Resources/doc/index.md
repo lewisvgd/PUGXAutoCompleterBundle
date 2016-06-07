@@ -123,7 +123,7 @@ You should configure each autocomplete filter:
    - *contains*  - LIKE '%value%'
 - **case_insensitive** - Whether or not matching should be case sensitive or not
 
-Usage
+**Usage**
 
 ``` php
 <?php
@@ -140,7 +140,7 @@ class AuthorFormType extends AbstractType
         ;
     }
 }
-
+```
 ### 3.2 Manual Configuration
 
 
