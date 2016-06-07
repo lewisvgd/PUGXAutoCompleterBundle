@@ -40,7 +40,7 @@ class AutocompleteType extends AbstractType
 
         if ($options['entity_alias']) {
 
-            $entities = $this->container->getParameter('shtumi.autocomplete_entities');
+            $entities = $this->container->getParameter('pugx_autocompleter.autocomplete_entities');
 
             if (!isset($entities[$options['entity_alias']])) {
 
