@@ -31,6 +31,11 @@ class AjaxAutocompleteJSONController extends Controller
             }
         }
 
+        if (isset($entityInfo['custom_search']) && $entityInfo['custom_search']) {
+
+            return $this->forward($entityInfo['custom_search'], array('entityInfo' => $entityInfo));
+        }
+
         switch ($entityInfo['search']){
             case "begins_with":
                 $like = $letters . '%';
@@ -78,17 +83,22 @@ class AjaxAutocompleteJSONController extends Controller
 
         $id           = $request->get('id');
 
-        $entity_inf = $entities[$entityAlias];
+        $entityInfo = $entities[$entityAlias];
 
-        if ($entity_inf['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
+        if ($entityInfo['role'] !== 'IS_AUTHENTICATED_ANONYMOUSLY'){
 
-            if (false === $this->get('security.context')->isGranted($entity_inf['role'])) {
+            if (false === $this->get('security.context')->isGranted($entityInfo['role'])) {
                 throw new AccessDeniedException();
             }
         }
 
-        $class      = $entity_inf['class'];
-        $property   = $entity_inf['property'];
+        if (isset($entityInfo['custom_get']) && $entityInfo['custom_get']) {
+
+            return $this->forward($entityInfo['custom_get'], array('entityInfo' => $entityInfo));
+        }
+
+        $class      = $entityInfo['class'];
+        $property   = $entityInfo['property'];
 
         $item = $em->getRepository($class)->find($id);
 

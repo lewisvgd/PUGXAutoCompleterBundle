@@ -46,7 +46,9 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode('case_insensitive')
                         ->defaultTrue()
                     ->end()
-                    ->scalarNode('action')
+                    ->scalarNode('custom_search')
+                    ->end()
+                    ->scalarNode('custom_get')
                     ->end()
                 ->end()
             ->end();
