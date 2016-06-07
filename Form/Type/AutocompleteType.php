@@ -16,13 +16,15 @@ class AutocompleteType extends AbstractType
      * @var ManagerRegistry
      */
     private $registry;
+    private $container;
 
     /**
      * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, $container)
     {
-        $this->registry = $registry;
+        $this->registry  = $registry;
+        $this->container = $container;
     }
 
     /**
@@ -30,10 +32,27 @@ class AutocompleteType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (empty($options['class'])) {
-            throw new InvalidConfigurationException('Option "class" must be set.');
+        if (empty($options['class']) && empty($options['entity_alias'])) {
+            throw new InvalidConfigurationException('Option "class" or "entity_alias" must be set.');
         }
-        $transformer = new ObjectToIdTransformer($this->registry, $options['class']);
+
+        if ($options['entity_alias']) {
+
+            $entities = $this->container->getParameter('shtumi.autocomplete_entities');
+
+            if (!isset($entities[$options['entity_alias']])) {
+
+                throw new InvalidConfigurationException('Invalid value for "entity_alias"');
+            }
+
+            $class = $entities[$options['entity_alias']]['class'];
+        }
+
+        if ($options['class']) {
+            $class = $options['class'];
+        }
+
+        $transformer = new ObjectToIdTransformer($this->registry, $class);
         $builder->addModelTransformer($transformer);
     }
 
@@ -43,8 +62,9 @@ class AutocompleteType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'class' => '',
-            'invalid_message' => 'The selected item does not exist',
+            'class'             => '',
+            'entity_alias'      => '',
+            'invalid_message'   => 'The selected item does not exist',
         ));
     }
 

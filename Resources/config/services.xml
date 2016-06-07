@@ -12,6 +12,7 @@
     <services>
         <service id="pugx_autocompleter.autocomplete" class="%pugx_autocompleter.autocomplete.class%">
             <argument type="service" id="doctrine"/>
+            <argument type="service" id="service_container"/>
             <tag name="form.type" alias="autocomplete" />
         </service>
         <service id="pugx_autocompleter.filter_autocomplete" class="%pugx_autocompleter.filter_autocomplete.class%">

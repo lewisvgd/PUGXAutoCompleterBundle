@@ -5,7 +5,8 @@
             url_list: '',
             url_get:  '',
             min_length: 2,
-            on_select_callback: null
+            on_select_callback: null,
+            entity_alias: ''
         };
         return this.each(function () {
             if (options) {
@@ -26,8 +27,14 @@
                 minLength: settings.min_length
             });
             if ($this.val() !== '') {
+
+                if (settings.url_get) {
+                    var link = settings.url_get;
+                }else{
+                    var link = Routing.generate('pugx_autocomplete_get', {id: $(this).val(), entityAlias: settings.entity_alias});
+                }
                 $.ajax({
-                    url:     settings.url_get + $this.val(),
+                    url:     link,
                     success: function (name) {
                         $fakeInput.val(name);
                     }

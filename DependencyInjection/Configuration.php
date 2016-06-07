@@ -20,7 +20,37 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('pugx_autocompleter');
+        $root = $treeBuilder->root('pugx_autocompleter');
+
+        $root
+            ->children()
+                ->arrayNode('autocomplete_entities')
+                ->useAttributeAsKey('id')
+                ->prototype('array')
+                ->children()
+                    ->scalarNode('class')
+                        ->cannotBeEmpty()
+                    ->end()
+                    ->scalarNode('property')
+                        ->defaultValue('title')
+                        ->cannotBeEmpty()
+                    ->end()
+                    ->scalarNode('role')
+                        ->defaultValue('IS_AUTHENTICATED_ANONYMOUSLY')
+                        ->cannotBeEmpty()
+                    ->end()
+                    ->scalarNode('search')
+                        ->defaultValue('begins_with')
+                        ->cannotBeEmpty()
+                    ->end()
+                    ->booleanNode('case_insensitive')
+                        ->defaultTrue()
+                    ->end()
+                    ->scalarNode('action')
+                    ->end()
+                ->end()
+            ->end();
+
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
