@@ -2,7 +2,7 @@
     <script>
         jQuery(function() {
             jQuery("#{{ form.vars.id }}").autocompleter({
-                url_list: '{{ path('pugx_autocomplete_search', {entityAlias: 'categories'}) }}',
+                url_list: '{{ path('pugx_autocomplete_search', {entityAlias: entity_alias}) }}',
                 entity_alias: '{{ entity_alias }}'
             });
         });
